@@ -1,0 +1,187 @@
+2025-04-06 16:37:08.960876: C:\Windows\system32\cmd.exe - python  "F:\AI Assistant (Jarvis)\active_window_monitoring.py"
+2025-04-06 16:37:08.960876: C:\Windows\system32\cmd.exe - python  "F:\AI Assistant (Jarvis)\main.py"
+2025-04-06 16:37:08.960876: C:\Windows\system32\cmd.exe - python  "F:\AI Assistant (Jarvis)\System_monitor_system.py"
+2025-04-06 16:37:08.960876: C:\Windows\system32\cmd.exe - python  "F:\AI Assistant (Jarvis)\active_window_monitoring.py"
+2025-04-06 16:37:08.960876: Select C:\Windows\system32\cmd.exe - python  "F:\AI Assistant (Jarvis)\task_terminal.py"
+2025-04-06 16:37:08.960876: C:\Windows\system32\cmd.exe - python  "F:\AI Assistant (Jarvis)\active_window_monitoring.py"
+2025-04-06 16:37:08.960876: Snap Assist
+2025-04-06 16:37:08.960876: C:\Windows\system32\cmd.exe - python  "F:\AI Assistant (Jarvis)\active_window_monitoring.py"
+2025-04-06 16:37:08.960876: C:\Windows\system32\cmd.exe - python  "F:\AI Assistant (Jarvis)\System_monitor_system.py"
+2025-04-06 16:37:08.960876: Select C:\Windows\system32\cmd.exe - python  "F:\AI Assistant (Jarvis)\task_terminal.py"
+2025-04-06 16:37:08.960876: Snap Assist
+2025-04-06 16:37:08.960876: C:\Windows\system32\cmd.exe - python  "F:\AI Assistant (Jarvis)\main.py"
+2025-04-06 16:37:08.960876: C:\Windows\system32\cmd.exe - python  "F:\AI Assistant (Jarvis)\task_terminal.py"
+2025-04-06 16:37:08.960876: C:\Windows\system32\cmd.exe - python  "F:\AI Assistant (Jarvis)\active_window_monitoring.py"
+2025-04-06 16:38:42.426155: C:\Windows\system32\cmd.exe - python  "F:\AI Assistant (Jarvis)\System_monitor_system.py"
+2025-04-06 16:38:42.426155: C:\Windows\system32\cmd.exe - python  "F:\AI Assistant (Jarvis)\task_terminal.py"
+2025-04-06 16:38:42.426155: C:\Windows\system32\cmd.exe - python  "F:\AI Assistant (Jarvis)\active_window_monitoring.py"
+2025-04-06 16:38:42.426155: C:\Windows\system32\cmd.exe - python  "F:\AI Assistant (Jarvis)\task_terminal.py"
+2025-04-06 16:38:42.426155: Snap Assist
+2025-04-06 16:38:42.426155: C:\Windows\system32\cmd.exe - python  "F:\AI Assistant (Jarvis)\main.py"
+2025-04-06 16:38:42.426155: Select C:\Windows\system32\cmd.exe - python  "F:\AI Assistant (Jarvis)\main.py"
+2025-04-06 16:38:42.426155: C:\Windows\system32\cmd.exe - python  "F:\AI Assistant (Jarvis)\main.py"
+2025-04-06 16:38:42.426155: C:\Windows\system32\cmd.exe - python  "F:\AI Assistant (Jarvis)\task_terminal.py"
+2025-04-06 16:38:42.426155: C:\Windows\system32\cmd.exe - python  "F:\AI Assistant (Jarvis)\main.py"
+2025-04-06 16:38:42.426155: C:\Windows\system32\cmd.exe - python  "F:\AI Assistant (Jarvis)\task_terminal.py"
+2025-04-06 16:57:44.184625: C:\Windows\system32\cmd.exe - python  "F:\AI Assistant (Jarvis)\System_monitor_system.py"
+2025-04-06 16:57:44.184625: C:\Windows\system32\cmd.exe - python  "F:\AI Assistant (Jarvis)\task_terminal.py"
+2025-04-06 16:57:44.184625: C:\Windows\system32\cmd.exe - python  "F:\AI Assistant (Jarvis)\System_monitor_system.py"
+2025-04-06 16:57:44.184625: C:\Windows\system32\cmd.exe - python  "F:\AI Assistant (Jarvis)\main.py"
+2025-04-06 16:57:44.184625: C:\Windows\system32\cmd.exe - python  "F:\AI Assistant (Jarvis)\active_window_monitoring.py"
+2025-04-06 16:57:44.184625: C:\Windows\system32\cmd.exe - python  "F:\AI Assistant (Jarvis)\main.py"
+2025-04-06 16:57:44.184625: Snap Assist
+2025-04-06 16:57:44.184625: C:\Windows\system32\cmd.exe - python  "F:\AI Assistant (Jarvis)\task_terminal.py"
+2025-04-06 16:57:44.184625: C:\Windows\system32\cmd.exe - python  "F:\AI Assistant (Jarvis)\main.py"
+2025-04-06 16:57:44.184625: C:\Windows\system32\cmd.exe - python  "F:\AI Assistant (Jarvis)\task_terminal.py"
+2025-04-06 16:57:44.184625: C:\Windows\system32\cmd.exe - python  "F:\AI Assistant (Jarvis)\main.py"
+2025-04-06 16:57:44.184625: C:\Windows\system32\cmd.exe - python  "F:\AI Assistant (Jarvis)\System_monitor_system.py"
+2025-04-07 15:58:39.100408: C:\Windows\system32\cmd.exe - python  "F:\AI Assistant (Jarvis)\active_window_monitoring.py"
+2025-04-07 15:59:40.440450: C:\Windows\system32\cmd.exe - python  "F:\AI Assistant (Jarvis)\active_window_monitoring.py"
+2025-04-07 15:59:40.440450: Select C:\Windows\system32\cmd.exe - python  "F:\AI Assistant (Jarvis)\task_terminal.py"
+2025-04-07 15:59:40.440450: C:\Windows\system32\cmd.exe - python  "F:\AI Assistant (Jarvis)\main.py"
+2025-04-07 15:59:40.440450: Select C:\Windows\system32\cmd.exe
+2025-04-07 15:59:40.440450: C:\Windows\system32\cmd.exe - python  "F:\AI Assistant (Jarvis)\main.py"
+2025-04-07 15:59:40.440450: Select C:\Windows\system32\cmd.exe - python  "F:\AI Assistant (Jarvis)\task_terminal.py"
+2025-04-07 15:59:40.440450: C:\Windows\system32\cmd.exe - python  "F:\AI Assistant (Jarvis)\active_window_monitoring.py"
+2025-04-07 16:05:48.415880: C:\Windows\system32\cmd.exe - python  "F:\AI Assistant (Jarvis)\active_window_monitoring.py"
+2025-04-07 16:05:48.415880: launcher.py - AI Assistant (Jarvis) - Visual Studio Code
+2025-04-07 16:05:48.415880: System_monitor_system.py - AI Assistant (Jarvis) - Visual Studio Code
+2025-04-07 16:05:48.415880: New notification
+2025-04-07 16:05:48.415880: System_monitor_system.py - AI Assistant (Jarvis) - Visual Studio Code
+2025-04-07 16:06:22.900114: C:\Windows\system32\cmd.exe - python  "F:\AI Assistant (Jarvis)\active_window_monitoring.py"
+2025-04-07 16:06:22.900114: C:\Windows\system32\cmd.exe - python  "F:\AI Assistant (Jarvis)\main.py"
+2025-04-07 16:06:22.900114: C:\Windows\system32\cmd.exe - python  "F:\AI Assistant (Jarvis)\main.py" (Not Responding)
+2025-04-07 16:06:22.900114: Microsoft Windows
+2025-04-07 16:06:22.900114: C:\Windows\system32\cmd.exe - python  "F:\AI Assistant (Jarvis)\active_window_monitoring.py"
+2025-04-07 16:07:55.299268: C:\Windows\system32\cmd.exe - python  "F:\AI Assistant (Jarvis)\System_monitor_system.py"
+2025-04-07 16:07:55.299268: C:\Windows\system32\cmd.exe - python  "F:\AI Assistant (Jarvis)\main.py"
+2025-04-07 16:07:55.299268: C:\Windows\system32\cmd.exe - python  "F:\AI Assistant (Jarvis)\main.py" (Not Responding)
+2025-04-07 16:07:55.299268: Microsoft Windows
+2025-04-07 16:07:55.299268: C:\Windows\system32\cmd.exe - python  "F:\AI Assistant (Jarvis)\main.py" (Not Responding)
+2025-04-07 16:07:55.299268: launcher.py - AI Assistant (Jarvis) - Visual Studio Code
+2025-04-07 16:08:59.835967: C:\Windows\system32\cmd.exe - python  "F:\AI Assistant (Jarvis)\main.py"
+2025-04-07 16:08:59.835967: Select C:\Windows\system32\cmd.exe - python  "F:\AI Assistant (Jarvis)\task_terminal.py"
+2025-04-07 16:08:59.835967: C:\Windows\system32\cmd.exe - python  "F:\AI Assistant (Jarvis)\task_terminal.py"
+2025-04-07 16:08:59.835967: Select C:\Windows\system32\cmd.exe - python  "F:\AI Assistant (Jarvis)\task_terminal.py"
+2025-04-07 16:08:59.835967: FxSound
+2025-04-07 16:08:59.835967: Select C:\Windows\system32\cmd.exe - python  "F:\AI Assistant (Jarvis)\task_terminal.py"
+2025-04-07 16:08:59.835967: FxSound
+2025-04-07 16:08:59.835967: Select C:\Windows\system32\cmd.exe - python  "F:\AI Assistant (Jarvis)\task_terminal.py"
+2025-04-07 16:08:59.835967: C:\Windows\system32\cmd.exe - python  "F:\AI Assistant (Jarvis)\task_terminal.py"
+2025-04-07 16:08:59.835967: C:\Windows\system32\cmd.exe - python  "F:\AI Assistant (Jarvis)\main.py"
+2025-04-07 16:08:59.835967: C:\Windows\system32\cmd.exe - python  "F:\AI Assistant (Jarvis)\task_terminal.py"
+2025-04-07 16:08:59.835967: FxSound
+2025-04-07 16:08:59.835967: C:\Windows\system32\cmd.exe - python  "F:\AI Assistant (Jarvis)\task_terminal.py"
+2025-04-07 16:08:59.835967: Select C:\Windows\system32\cmd.exe - python  "F:\AI Assistant (Jarvis)\task_terminal.py"
+2025-04-07 16:08:59.835967: C:\Windows\system32\cmd.exe - python  "F:\AI Assistant (Jarvis)\task_terminal.py"
+2025-04-07 16:08:59.835967: C:\Windows\system32\cmd.exe - python  "F:\AI Assistant (Jarvis)\main.py"
+2025-04-07 16:08:59.835967: C:\Windows\system32\cmd.exe - python  "F:\AI Assistant (Jarvis)\task_terminal.py"
+2025-04-07 16:08:59.835967: C:\Windows\system32\cmd.exe - python  "F:\AI Assistant (Jarvis)\main.py"
+2025-04-07 16:08:59.835967: New notification
+2025-04-07 16:08:59.835967: launcher.py - AI Assistant (Jarvis) - Visual Studio Code
+2025-04-07 16:08:59.835967: System_monitor_system.py - AI Assistant (Jarvis) - Visual Studio Code
+2025-04-07 16:08:59.835967: Search
+2025-04-07 16:08:59.835967: Settings
+2025-04-07 16:08:59.835967: C:\Windows\system32\cmd.exe - python  "F:\AI Assistant (Jarvis)\task_terminal.py"
+2025-04-07 16:08:59.835967: Settings
+2025-04-07 16:08:59.835967: C:\Windows\system32\cmd.exe - python  "F:\AI Assistant (Jarvis)\task_terminal.py"
+2025-04-07 16:08:59.835967: Settings
+2025-04-07 16:08:59.835967: C:\Windows\system32\cmd.exe - python  "F:\AI Assistant (Jarvis)\task_terminal.py"
+2025-04-07 16:08:59.835967: New notification
+2025-04-07 16:08:59.835967: System_monitor_system.py - AI Assistant (Jarvis) - Visual Studio Code
+2025-04-07 16:08:59.835967: ChatGPT - Alarm Code Fix
+2025-04-07 16:08:59.835967: System_monitor_system.py - AI Assistant (Jarvis) - Visual Studio Code
+2025-04-07 16:20:13.886068: C:\Windows\system32\cmd.exe - python  "F:\AI Assistant (Jarvis)\main.py"
+2025-04-07 16:20:13.886068: Task Manager
+2025-04-07 16:20:13.886068: C:\Windows\system32\cmd.exe - python  "F:\AI Assistant (Jarvis)\main.py"
+2025-04-07 16:20:13.886068: New notification
+2025-04-07 16:20:13.886068: launcher.py - AI Assistant (Jarvis) - Visual Studio Code
+2025-04-07 16:20:13.886068: System_monitor_system.py - AI Assistant (Jarvis) - Visual Studio Code
+2025-04-07 16:20:13.886068: __init__.py - AI Assistant (Jarvis) - Visual Studio Code
+2025-04-07 16:20:13.886068: System_monitor_system.py - AI Assistant (Jarvis) - Visual Studio Code
+2025-04-07 16:22:02.599234: C:\Windows\system32\cmd.exe
+2025-04-07 16:22:02.599234: C:\Windows\system32\cmd.exe - python  "F:\AI Assistant (Jarvis)\main.py"
+2025-04-07 16:22:02.599234: C:\Windows\system32\cmd.exe - python  "F:\AI Assistant (Jarvis)\task_terminal.py"
+2025-04-07 16:22:02.599234: C:\Windows\system32\cmd.exe - python  "F:\AI Assistant (Jarvis)\main.py"
+2025-04-07 16:22:02.599234: Select C:\Windows\system32\cmd.exe - python  "F:\AI Assistant (Jarvis)\main.py"
+2025-04-07 16:22:02.599234: C:\Windows\system32\cmd.exe - python  "F:\AI Assistant (Jarvis)\task_terminal.py"
+2025-04-07 16:22:02.599234: launcher.py - AI Assistant (Jarvis) - Visual Studio Code
+2025-04-07 16:22:02.599234: ChatGPT - Alarm Code Fix
+2025-04-07 16:22:02.599234: launcher.py - AI Assistant (Jarvis) - Visual Studio Code
+2025-04-07 16:22:02.599234: System_monitor_system.py - AI Assistant (Jarvis) - Visual Studio Code
+2025-04-07 16:29:07.396352: C:\Windows\system32\cmd.exe - python  "F:\AI Assistant (Jarvis)\main.py"
+2025-04-07 16:29:07.396352: launcher.py - AI Assistant (Jarvis) - Visual Studio Code
+2025-04-07 16:29:07.396352: System_monitor_system.py - AI Assistant (Jarvis) - Visual Studio Code
+2025-04-07 16:29:52.324386: launcher.py - AI Assistant (Jarvis) - Visual Studio Code
+2025-04-07 16:29:52.324386: C:\Windows\system32\cmd.exe - python  "F:\AI Assistant (Jarvis)\task_terminal.py"
+2025-04-07 16:29:52.324386: C:\Windows\system32\cmd.exe - python  "F:\AI Assistant (Jarvis)\main.py"
+2025-04-07 16:29:52.324386: C:\Windows\system32\cmd.exe - python  "F:\AI Assistant (Jarvis)\task_terminal.py"
+2025-04-07 16:29:52.324386: C:\Windows\system32\cmd.exe - python  "F:\AI Assistant (Jarvis)\main.py"
+2025-04-07 16:29:52.324386: YouTube - I Created a Drink Water Notification Reminder App in Python - YouTube
+2025-04-07 16:29:52.324386: Google Chrome
+2025-04-07 16:29:52.324386: New Incognito Tab - Google Chrome
+2025-04-07 16:29:52.324386: YouTube - Google Chrome
+2025-04-07 16:29:52.324386: saiyaan kailash kher - YouTube - Google Chrome
+2025-04-07 16:29:52.324386: YouTube - Google Chrome
+2025-04-07 16:29:52.324386: Saiyyan - Kailash Kher| Paresh Kamath| Naresh Kamath | Jhoomo Re - YouTube - Google Chrome
+2025-04-07 16:29:52.324386: C:\Windows\system32\cmd.exe - python  "F:\AI Assistant (Jarvis)\main.py"
+2025-04-07 16:29:52.324386: Saiyyan - Kailash Kher| Paresh Kamath| Naresh Kamath | Jhoomo Re - YouTube - Google Chrome
+2025-04-07 16:29:52.324386: C:\Windows\system32\cmd.exe - python  "F:\AI Assistant (Jarvis)\main.py"
+2025-04-07 16:29:52.324386: Saiyyan - Kailash Kher| Paresh Kamath| Naresh Kamath | Jhoomo Re - YouTube - Google Chrome
+2025-04-07 16:29:52.324386: C:\Windows\system32\cmd.exe - python  "F:\AI Assistant (Jarvis)\main.py"
+2025-04-07 16:29:52.324386: Saiyyan - Kailash Kher| Paresh Kamath| Naresh Kamath | Jhoomo Re - YouTube - Google Chrome
+2025-04-07 16:29:52.324386: FxSound
+2025-04-07 16:29:52.324386: C:\Windows\system32\cmd.exe - python  "F:\AI Assistant (Jarvis)\main.py"
+2025-04-07 16:29:52.324386: launcher.py - AI Assistant (Jarvis) - Visual Studio Code
+2025-04-07 16:29:52.324386: C:\Windows\system32\cmd.exe - python  "F:\AI Assistant (Jarvis)\task_terminal.py"
+2025-04-07 16:29:52.324386: C:\Windows\system32\cmd.exe - python  "F:\AI Assistant (Jarvis)\main.py"
+2025-04-07 16:29:52.324386: launcher.py - AI Assistant (Jarvis) - Visual Studio Code
+2025-04-07 16:29:52.324386: System_monitor_system.py - AI Assistant (Jarvis) - Visual Studio Code
+2025-04-07 16:32:42.997668: C:\Windows\system32\cmd.exe
+2025-04-07 16:32:42.997668: C:\Windows\system32\cmd.exe - python  "F:\AI Assistant (Jarvis)\main.py"
+2025-04-07 16:32:42.997668: Select C:\Windows\system32\cmd.exe - python  "F:\AI Assistant (Jarvis)\main.py"
+2025-04-07 16:32:42.997668: C:\Windows\system32\cmd.exe - python  "F:\AI Assistant (Jarvis)\task_terminal.py"
+2025-04-07 16:32:42.997668: Select C:\Windows\system32\cmd.exe - python  "F:\AI Assistant (Jarvis)\main.py"
+2025-04-07 16:32:42.997668: Saiyyan - Kailash Kher| Paresh Kamath| Naresh Kamath | Jhoomo Re - YouTube - Google Chrome
+2025-04-07 16:32:42.997668: Select C:\Windows\system32\cmd.exe - python  "F:\AI Assistant (Jarvis)\main.py"
+2025-04-07 16:32:42.997668: FxSound
+2025-04-07 16:32:42.997668: Select C:\Windows\system32\cmd.exe - python  "F:\AI Assistant (Jarvis)\main.py"
+2025-04-07 16:32:42.997668: FxSound
+2025-04-07 16:32:42.997668: Select C:\Windows\system32\cmd.exe - python  "F:\AI Assistant (Jarvis)\main.py"
+2025-04-07 16:32:42.997668: Saiyyan - Kailash Kher| Paresh Kamath| Naresh Kamath | Jhoomo Re - YouTube - Google Chrome
+2025-04-07 16:32:42.997668: Select C:\Windows\system32\cmd.exe - python  "F:\AI Assistant (Jarvis)\main.py"
+2025-04-07 16:32:42.997668: launcher.py - AI Assistant (Jarvis) - Visual Studio Code
+2025-04-07 16:32:42.997668: System_monitor_system.py - AI Assistant (Jarvis) - Visual Studio Code
+2025-04-07 16:32:42.997668: __init__.pyi - AI Assistant (Jarvis) - Visual Studio Code
+2025-04-07 16:32:42.997668: System_monitor_system.py - AI Assistant (Jarvis) - Visual Studio Code
+2025-04-07 16:32:42.997668: Select C:\Windows\system32\cmd.exe - python  "F:\AI Assistant (Jarvis)\main.py"
+2025-04-07 16:32:42.997668: C:\Windows\system32\cmd.exe - python  "F:\AI Assistant (Jarvis)\task_terminal.py"
+2025-04-07 16:32:42.997668: Select C:\Windows\system32\cmd.exe - python  "F:\AI Assistant (Jarvis)\main.py"
+2025-04-07 16:32:42.997668: C:\Windows\system32\cmd.exe - python  "F:\AI Assistant (Jarvis)\task_terminal.py"
+2025-04-07 16:32:42.997668: Select C:\Windows\system32\cmd.exe - python  "F:\AI Assistant (Jarvis)\main.py"
+2025-04-07 16:32:42.997668: System_monitor_system.py - AI Assistant (Jarvis) - Visual Studio Code
+2025-04-07 16:32:42.997668: C:\Windows\system32\cmd.exe - python  "F:\AI Assistant (Jarvis)\task_terminal.py"
+2025-04-07 16:32:42.997668: Saiyyan - Kailash Kher| Paresh Kamath| Naresh Kamath | Jhoomo Re - YouTube - Google Chrome
+2025-04-07 16:32:42.997668: Select C:\Windows\system32\cmd.exe - python  "F:\AI Assistant (Jarvis)\main.py"
+2025-04-07 16:32:42.997668: C:\Windows\system32\cmd.exe - python  "F:\AI Assistant (Jarvis)\main.py"
+2025-04-07 16:32:42.997668: ChatGPT - Alarm Code Fix
+2025-04-07 16:32:42.997668: Select C:\Windows\system32\cmd.exe - python  "F:\AI Assistant (Jarvis)\main.py"
+2025-04-07 16:32:42.997668: C:\Windows\system32\cmd.exe - python  "F:\AI Assistant (Jarvis)\main.py"
+2025-04-07 16:32:42.997668: C:\Windows\system32\cmd.exe - python  "F:\AI Assistant (Jarvis)\task_terminal.py"
+2025-04-07 16:32:42.997668: C:\Windows\system32\cmd.exe - python  "F:\AI Assistant (Jarvis)\main.py"
+2025-04-07 16:32:42.997668: C:\Windows\system32\cmd.exe - python  "F:\AI Assistant (Jarvis)\task_terminal.py"
+2025-04-07 16:32:42.997668: Saiyyan - Kailash Kher| Paresh Kamath| Naresh Kamath | Jhoomo Re - YouTube - Google Chrome
+2025-04-07 16:32:42.997668: mera dhol mahi mere man ka raja - YouTube - Google Chrome
+2025-04-07 16:32:42.997668: Saiyyan - Kailash Kher| Paresh Kamath| Naresh Kamath | Jhoomo Re - YouTube - Google Chrome
+2025-04-07 16:32:42.997668: Mera Dhol Mahi Mere Man Ka Raja | Nusrat Fateh Ali Khan | full version | OSA Worldwide - YouTube - Google Chrome
+2025-04-07 16:32:42.997668: C:\Windows\system32\cmd.exe - python  "F:\AI Assistant (Jarvis)\task_terminal.py"
+2025-04-07 16:32:42.997668: Select C:\Windows\system32\cmd.exe - python  "F:\AI Assistant (Jarvis)\task_terminal.py"
+2025-04-07 16:32:42.997668: C:\Windows\system32\cmd.exe - python  "F:\AI Assistant (Jarvis)\task_terminal.py"
+2025-04-07 16:32:42.997668: C:\Windows\system32\cmd.exe - python  "F:\AI Assistant (Jarvis)\main.py"
+2025-04-07 16:32:42.997668: Mera Dhol Mahi Mere Man Ka Raja | Nusrat Fateh Ali Khan | full version | OSA Worldwide - YouTube - Google Chrome
+2025-04-07 16:32:42.997668: ChatGPT - Alarm Code Fix
+2025-04-07 16:32:42.997668: Mera Dhol Mahi Mere Man Ka Raja | Nusrat Fateh Ali Khan | full version | OSA Worldwide - YouTube - Google Chrome
+2025-04-07 16:32:42.997668: ChatGPT - Alarm Code Fix
+2025-04-07 16:32:42.997668: System_monitor_system.py - AI Assistant (Jarvis) - Visual Studio Code
+2025-04-07 16:32:42.997668: launcher.py - AI Assistant (Jarvis) - Visual Studio Code
+2025-04-07 16:32:42.997668: Artificial_Intelligence_GPT.py - AI Assistant (Jarvis) - Visual Studio Code
