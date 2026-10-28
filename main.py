@@ -5,9 +5,11 @@ import re
 from time import perf_counter
 
 from diagnostics import run_startup_checks
-from offline import OLLAMA_MODEL, answer_question
+from offline import answer_question, configured_model
 from speechdrive import SpeechStreamer
 from memory import save_exchange
+from settings_menu import settings_menu
+from user_settings import get_name, get_settings, set_name
 
 
 def _save_safely(**record) -> None:
@@ -19,11 +21,27 @@ def _save_safely(**record) -> None:
 
 
 def main() -> None:
+    name = get_name()
+    while not name:
+        try:
+            name = input("Hi, I'm Jarvis. What should I call you? ").strip()
+        except (EOFError, KeyboardInterrupt):
+            print("\nGoodbye.")
+            return
+        if not name:
+            print("Please enter a name so I can save your profile.")
+            continue
+        try:
+            set_name(name)
+        except OSError:
+            print("I couldn't save your name. Check that the memory folder is writable.")
+            name = ""
+
     try:
         run_startup_checks()
     except Exception:
         pass
-    print("Jarvis is ready. Ask a question, or type 'exit' to quit.")
+    print(f"Jarvis is ready, {name}. Ask a question, type '/settings' to configure, or 'exit' to quit.")
     while True:
         try:
             question = input("You: ").strip()
@@ -36,6 +54,14 @@ def main() -> None:
             print("Goodbye.")
             break
         if not question:
+            continue
+        if question.lower() == "/settings":
+            try:
+                if settings_menu():
+                    print("Goodbye.")
+                    break
+            except (EOFError, KeyboardInterrupt):
+                print("\nSettings closed.")
             continue
 
         started = perf_counter()
@@ -79,7 +105,8 @@ def main() -> None:
                 question=question,
                 answer=answer,
                 asked_at=asked_at,
-                model=OLLAMA_MODEL,
+                model=configured_model(),
+                voice=get_settings()["voice"],
                 duration_seconds=elapsed,
                 speech_status=speech_status,
                 status="success",
@@ -92,7 +119,7 @@ def main() -> None:
                 question=question,
                 answer=None,
                 asked_at=asked_at,
-                model=OLLAMA_MODEL,
+                model=configured_model(),
                 duration_seconds=elapsed,
                 speech_status="not attempted",
                 status="error",

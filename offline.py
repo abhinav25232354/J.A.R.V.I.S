@@ -5,9 +5,9 @@ import os
 import subprocess
 from urllib.error import HTTPError, URLError
 from urllib.request import Request, urlopen
+from user_settings import get_settings
 
 
-OLLAMA_MODEL = os.getenv("OLLAMA_MODEL", "llama3.2:1b")
 OLLAMA_URL = os.getenv("OLLAMA_URL", "http://localhost:11434")
 _active_url: str | None = None
 
@@ -51,6 +51,11 @@ def _model_names(payload: dict) -> set[str]:
     }
 
 
+def configured_model() -> str:
+    """Resolve the persisted model, while allowing an environment override."""
+    return os.getenv("OLLAMA_MODEL", get_settings()["model"])
+
+
 def check_ollama() -> dict:
     """Find a reachable Ollama server, preferring Windows before WSL."""
     global _active_url
@@ -65,7 +70,8 @@ def check_ollama() -> dict:
             continue
         _active_url = url
         names = _model_names(tags)
-        available = any(name == OLLAMA_MODEL or name.split(":", 1)[0] == OLLAMA_MODEL for name in names)
+        model = configured_model()
+        available = any(name == model or name.split(":", 1)[0] == model for name in names)
         return {
             "available": True,
             "url": url,
@@ -101,7 +107,7 @@ def answer_question(question: str, on_chunk=None) -> str:
         url = result["url"]
 
     payload = json.dumps({
-        "model": OLLAMA_MODEL,
+        "model": configured_model(),
         "messages": [{"role": "user", "content": question}],
         "stream": on_chunk is not None,
     }).encode("utf-8")

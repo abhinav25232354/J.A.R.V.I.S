@@ -11,6 +11,7 @@ from threading import Thread
 import time
 import uuid
 from pathlib import Path
+from user_settings import get_settings
 
 VOICE = "en-US-ChristopherNeural"
 _EDGE_AVAILABLE: bool | None = None
@@ -32,12 +33,17 @@ async def _generate_edge_audio(text: str, path: str) -> None:
     import edge_tts
 
     proxy = os.getenv("EDGE_TTS_PROXY") or None
+    settings = get_settings()
+    voice = settings["voice"]
+    speed = round((settings["speech_speed"] - 1.0) * 100)
+    rate = f"{speed:+d}%"
     last_error = None
     for attempt in range(2):
         try:
             communicate = edge_tts.Communicate(
                 text,
-                VOICE,
+                voice,
+                rate=rate,
                 proxy=proxy,
                 connect_timeout=12,
                 receive_timeout=45,
@@ -69,7 +75,7 @@ def check_edge_voice(timeout: float = 10.0) -> dict:
         ))
         _EDGE_AVAILABLE = True
         _EDGE_CHECKED_AT = time.monotonic()
-        return {"available": True, "voice": VOICE}
+        return {"available": True, "voice": get_settings()["voice"]}
     except Exception as exc:
         _EDGE_AVAILABLE = False
         _EDGE_CHECKED_AT = time.monotonic()
@@ -189,13 +195,18 @@ def _speak_local_windows(text: str) -> bool:
     try:
         import base64
 
+        settings = get_settings()
+        voice_name = settings["voice"].split("-")[-1].replace("Multilingual", "").replace("Neural", "")
         encoded = base64.b64encode(text.encode("utf-16le")).decode("ascii")
+        encoded_voice = base64.b64encode(voice_name.encode("utf-16le")).decode("ascii")
         script = (
             "$text=[Text.Encoding]::Unicode.GetString([Convert]::FromBase64String('"
             + encoded
+            + "')); $voiceName=[Text.Encoding]::Unicode.GetString([Convert]::FromBase64String('"
+            + encoded_voice
             + "')); Add-Type -AssemblyName System.Speech; "
             "$s=New-Object System.Speech.Synthesis.SpeechSynthesizer; "
-            "$v=$s.GetInstalledVoices() | Where-Object { $_.VoiceInfo.Name -match 'Christopher' } | Select-Object -First 1; "
+            "$v=$s.GetInstalledVoices() | Where-Object { $_.VoiceInfo.Name -match [regex]::Escape($voiceName) } | Select-Object -First 1; "
             "if ($v) { $s.SelectVoice($v.VoiceInfo.Name) }; $s.Speak($text)"
         )
         subprocess.run(
@@ -212,7 +223,7 @@ def _speak_local_windows(text: str) -> bool:
 
 
 def speak(text: str) -> str:
-    """Speak with Edge's Christopher voice, never raising to the caller."""
+    """Speak with the configured Edge voice, never raising to the caller."""
     global _EDGE_AVAILABLE, _EDGE_CHECKED_AT
     if not isinstance(text, str) or not text.strip():
         return "skipped"
@@ -230,7 +241,7 @@ def speak(text: str) -> str:
             _EDGE_CHECKED_AT = time.monotonic()
             backend = _play_with_fallbacks(audio_path)
             if backend:
-                return f"spoken with {VOICE} via {backend}"
+                return f"spoken with {get_settings()['voice']} via {backend}"
         except Exception:
             _EDGE_AVAILABLE = False
             _EDGE_CHECKED_AT = time.monotonic()
@@ -322,7 +333,7 @@ class SpeechStreamer:
                     if synthesized and path:
                         backend = _play_with_fallbacks(path)
                         if backend:
-                            self._statuses.append(f"spoken with {VOICE} via {backend}")
+                            self._statuses.append(f"spoken with {get_settings()['voice']} via {backend}")
                         elif _speak_local_windows(text):
                             self._statuses.append("spoken with Windows SAPI secondary voice")
                         else:

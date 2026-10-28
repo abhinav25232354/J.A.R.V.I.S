@@ -1,0 +1,5 @@
+{
+  "model": "llama3.2:1b",
+  "voice": "en-US-EmmaMultilingualNeural",
+  "speech_speed": 1.0
+}

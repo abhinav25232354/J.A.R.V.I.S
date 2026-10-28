@@ -84,8 +84,9 @@ def check_device() -> dict:
 
 def run_startup_checks() -> dict:
     """Run and print diagnostics; never prevent the assistant from starting."""
-    from offline import OLLAMA_MODEL, check_ollama
+    from offline import check_ollama, configured_model
     from speechdrive import check_edge_voice, speech_capabilities
+    from user_settings import get_settings
 
     print("Startup checks (informational):")
     try:
@@ -104,10 +105,10 @@ def run_startup_checks() -> dict:
         location = ollama["location"]
         print(f"  Ollama: found in {location} at {ollama['url']}")
         if ollama["model_available"]:
-            print(f"  Model: {OLLAMA_MODEL} is available")
+            print(f"  Model: {configured_model()} is available")
         else:
             installed = ", ".join(ollama["models"]) or "none"
-            print(f"  Model: {OLLAMA_MODEL} is missing; installed models: {installed}")
+            print(f"  Model: {configured_model()} is missing; installed models: {installed}")
 
     try:
         device = check_device()
@@ -153,9 +154,9 @@ def run_startup_checks() -> dict:
         ]
         ready_count = sum(bool(item) for item in playback)
         edge_status = (
-            "Edge Christopher online"
+            f"Edge voice ({get_settings()['voice']}) online"
             if edge_voice["available"]
-            else f"Edge Christopher unavailable ({edge_voice.get('detail', 'service check failed')}); Windows SAPI will be used"
+            else f"Edge voice unavailable ({edge_voice.get('detail', 'service check failed')}); Windows SAPI will be used"
         )
         print(f"  Speech: {edge_status}; {ready_count}/5 playback methods available")
     except Exception:

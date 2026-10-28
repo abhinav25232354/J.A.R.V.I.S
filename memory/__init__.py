@@ -16,6 +16,7 @@ def save_exchange(
     answer: str | None,
     asked_at: str,
     model: str,
+    voice: str = "en-US-ChristopherNeural",
     duration_seconds: float,
     speech_status: str,
     status: str,
@@ -31,7 +32,7 @@ def save_exchange(
         "provider": "ollama",
         "model": model,
         "duration_seconds": duration_seconds,
-        "speech": {"voice": "en-US-ChristopherNeural", "status": speech_status},
+        "speech": {"voice": voice, "status": speech_status},
         "status": status,
     }
     if error:

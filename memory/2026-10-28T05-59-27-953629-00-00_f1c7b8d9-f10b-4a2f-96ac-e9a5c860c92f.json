@@ -1,0 +1,15 @@
+{
+  "id": "f1c7b8d9-f10b-4a2f-96ac-e9a5c860c92f",
+  "asked_at": "2026-10-28T05:59:27.953629+00:00",
+  "saved_at": "2026-10-28T05:59:38.191489+00:00",
+  "question": "hello",
+  "answer": "Hello. How can I assist you today?",
+  "provider": "ollama",
+  "model": "llama3.2:1b",
+  "duration_seconds": 10.237,
+  "speech": {
+    "voice": "en-US-EmmaMultilingualNeural",
+    "status": "spoken with en-US-EmmaMultilingualNeural via pygame"
+  },
+  "status": "success"
+}
