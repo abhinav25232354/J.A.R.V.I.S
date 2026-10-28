@@ -1,13 +1,13 @@
 """Fault-tolerant speech output with five audio playback backends."""
 
 import asyncio
-import contextlib
 import importlib.util
-import io
 import os
+import queue
 import shutil
 import subprocess
 import tempfile
+from threading import Thread
 import time
 import uuid
 from pathlib import Path
@@ -173,8 +173,9 @@ def _play_with_fallbacks(path: str) -> str | None:
     )
     for name, playback in backends:
         try:
-            with contextlib.redirect_stdout(io.StringIO()), contextlib.redirect_stderr(io.StringIO()):
-                playback(path)
+            # Do not redirect sys.stdout/stderr here: they are process-wide, so a
+            # playback thread would swallow the independent Ollama text stream.
+            playback(path)
             return name
         except Exception:
             continue
@@ -247,3 +248,108 @@ def speak(text: str) -> str:
     if _speak_local_windows(text):
         return "spoken with Windows SAPI secondary voice"
     return "unavailable; text answer retained"
+
+
+class SpeechStreamer:
+    """Synthesize upcoming phrases while a playback worker speaks earlier ones."""
+
+    def __init__(self) -> None:
+        self._text_queue: queue.Queue = queue.Queue()
+        self._audio_queue: queue.Queue = queue.Queue()
+        self._statuses: list[str] = []
+        self._synthesizer = None
+        self._player = None
+        self._closed = False
+
+    def _start(self) -> None:
+        if self._synthesizer is not None:
+            return
+        self._synthesizer = Thread(target=self._synthesize, daemon=True)
+        self._player = Thread(target=self._play, daemon=True)
+        self._synthesizer.start()
+        self._player.start()
+
+    def submit(self, text: str) -> None:
+        if text and text.strip() and not self._closed:
+            self._start()
+            self._text_queue.put(text.strip())
+
+    def _synthesize(self) -> None:
+        global _EDGE_AVAILABLE, _EDGE_CHECKED_AT
+        while True:
+            text = self._text_queue.get()
+            try:
+                if text is None:
+                    break
+                path = None
+                try:
+                    should_try_edge = (
+                        _EDGE_AVAILABLE is not False
+                        or time.monotonic() - _EDGE_CHECKED_AT >= _EDGE_RECHECK_SECONDS
+                    )
+                    if not should_try_edge:
+                        self._audio_queue.put((None, text, False))
+                        continue
+                    with tempfile.NamedTemporaryFile(suffix=".mp3", delete=False) as audio_file:
+                        path = audio_file.name
+                    asyncio.run(_generate_edge_audio(text, path))
+                    _EDGE_AVAILABLE = True
+                    _EDGE_CHECKED_AT = time.monotonic()
+                    self._audio_queue.put((path, text, True))
+                    path = None
+                except Exception:
+                    _EDGE_AVAILABLE = False
+                    _EDGE_CHECKED_AT = time.monotonic()
+                    self._audio_queue.put((None, text, False))
+                finally:
+                    if path:
+                        try:
+                            os.remove(path)
+                        except OSError:
+                            pass
+            finally:
+                self._text_queue.task_done()
+        self._audio_queue.put(None)
+
+    def _play(self) -> None:
+        while True:
+            item = self._audio_queue.get()
+            try:
+                if item is None:
+                    return
+                path, text, synthesized = item
+                try:
+                    if synthesized and path:
+                        backend = _play_with_fallbacks(path)
+                        if backend:
+                            self._statuses.append(f"spoken with {VOICE} via {backend}")
+                        elif _speak_local_windows(text):
+                            self._statuses.append("spoken with Windows SAPI secondary voice")
+                        else:
+                            self._statuses.append("unavailable; text answer retained")
+                    elif _speak_local_windows(text):
+                        self._statuses.append("spoken with Windows SAPI secondary voice")
+                    else:
+                        self._statuses.append("unavailable; text answer retained")
+                finally:
+                    if path:
+                        for target in (path, f"{path}.wav"):
+                            try:
+                                os.remove(target)
+                            except OSError:
+                                pass
+            finally:
+                self._audio_queue.task_done()
+
+    def close(self) -> str:
+        if self._closed:
+            return "; ".join(dict.fromkeys(self._statuses)) or "skipped"
+        self._closed = True
+        if self._synthesizer is None:
+            return "skipped"
+        self._text_queue.put(None)
+        self._text_queue.join()
+        self._synthesizer.join()
+        self._audio_queue.join()
+        self._player.join()
+        return "; ".join(dict.fromkeys(self._statuses)) or "unavailable; text answer retained"

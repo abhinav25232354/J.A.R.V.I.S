@@ -83,8 +83,8 @@ def check_ollama() -> dict:
     }
 
 
-def answer_question(question: str) -> str:
-    """Return an answer from the discovered local or WSL Ollama server."""
+def answer_question(question: str, on_chunk=None) -> str:
+    """Return an answer, optionally delivering Ollama's text chunks as they arrive."""
     global _active_url
     question = question.strip()
     if not question:
@@ -103,7 +103,7 @@ def answer_question(question: str) -> str:
     payload = json.dumps({
         "model": OLLAMA_MODEL,
         "messages": [{"role": "user", "content": question}],
-        "stream": False,
+        "stream": on_chunk is not None,
     }).encode("utf-8")
     request = Request(
         f"{url.rstrip('/')}/api/chat",
@@ -113,7 +113,22 @@ def answer_question(question: str) -> str:
     )
     try:
         with urlopen(request, timeout=180) as response:
-            result = json.loads(response.read().decode("utf-8"))
+            if on_chunk is None:
+                result = json.loads(response.read().decode("utf-8"))
+                answer = result.get("message", {}).get("content", "").strip()
+            else:
+                parts = []
+                for line in response:
+                    if not line.strip():
+                        continue
+                    event = json.loads(line.decode("utf-8"))
+                    piece = event.get("message", {}).get("content", "")
+                    if piece:
+                        parts.append(piece)
+                        on_chunk(piece)
+                    if event.get("error"):
+                        raise RuntimeError(f"Ollama stream error: {event['error']}")
+                answer = "".join(parts).strip()
     except HTTPError as exc:
         detail = exc.read().decode("utf-8", errors="replace")
         raise RuntimeError(f"Ollama returned HTTP {exc.code}: {detail}") from exc
@@ -121,7 +136,6 @@ def answer_question(question: str) -> str:
         _active_url = None
         raise RuntimeError(f"Could not reach Ollama at {url}: {exc}") from exc
 
-    answer = result.get("message", {}).get("content", "").strip()
     if not answer:
         raise RuntimeError("Ollama returned an empty answer.")
     return answer

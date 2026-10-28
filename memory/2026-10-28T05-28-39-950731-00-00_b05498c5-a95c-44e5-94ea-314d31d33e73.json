@@ -1,0 +1,15 @@
+{
+  "id": "b05498c5-a95c-44e5-94ea-314d31d33e73",
+  "asked_at": "2026-10-28T05:28:39.950731+00:00",
+  "saved_at": "2026-10-28T05:28:46.402197+00:00",
+  "question": "Hello",
+  "answer": "How can I help you today?",
+  "provider": "ollama",
+  "model": "llama3.2:1b",
+  "duration_seconds": 6.452,
+  "speech": {
+    "voice": "en-US-ChristopherNeural",
+    "status": "spoken with en-US-ChristopherNeural via pygame"
+  },
+  "status": "success"
+}
