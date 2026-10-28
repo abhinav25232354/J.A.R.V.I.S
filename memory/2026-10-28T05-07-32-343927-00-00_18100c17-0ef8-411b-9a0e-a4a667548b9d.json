@@ -1,0 +1,15 @@
+{
+  "id": "18100c17-0ef8-411b-9a0e-a4a667548b9d",
+  "asked_at": "2026-10-28T05:07:32.343927+00:00",
+  "saved_at": "2026-10-28T05:07:44.190699+00:00",
+  "question": "Hello",
+  "answer": "How can I assist you today?",
+  "provider": "ollama",
+  "model": "llama3.2:1b",
+  "duration_seconds": 8.348,
+  "speech": {
+    "voice": "en-US-ChristopherNeural",
+    "status": "failed: 403, message='Invalid response status', url='wss://speech.platform.bing.com/consumer/speech/synthesize/readaloud/edge/v1?TrustedClientToken=6A5AA1D4EAFF4E9FB37E23D68491D6F4&ConnectionId=7c8f65da2ca94f61a0147242890afe41&Sec-MS-GEC=208D429C3819F4A5D46B66F7FE369B49C6991B3725BFCAC148EF8909668B1C25&Sec-MS-GEC-Version=1-143.0.3650.75'"
+  },
+  "status": "success"
+}

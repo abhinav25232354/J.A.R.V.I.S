@@ -1,19 +1,13 @@
-# Jarvis-Assistant-17-04-2025
-A Personal Virtual Assistant made by me and still under development
+# Jarvis
 
-# Initial Revival 28-10-2026
+This root project asks a locally running [Ollama](https://ollama.com/) model for answers, speaks them with Edge TTS's Christopher voice, and saves each exchange as a separate JSON file in `memory/`. At startup it checks internet reachability, looks for Ollama on Windows and then WSL, checks memory storage and speech playback options, and reports CPU, RAM, disk, and available temperature sensor readings. These checks are informational and do not prevent startup.
 
-This version resembles the initial stage of development as I started many years ago,
-starting it again it regain the momentum which I left after many unexpected life curves.
+## Setup
 
-## Features planning to include:
+1. Install Ollama in Windows or WSL and download a model, for example `ollama pull llama3.2`.
+2. Install or update Python dependencies: `python -m pip install --upgrade -r requirements.txt`.
+3. Run `python main.py`.
 
-1. minimal structure
-2. consistent learning using CNN (concurrent neural network)
-3. persistant memory by using JSON and Blobs
-4. By using Edge-tts as speech engine for natural flow
-5. Offline models integration
-6. useful suggestion according to what is happening at that time.
-7. Huge scalability fix
-8. Exceptional error handling
-9. self reconstructing capability by using selfMemory map.
+Ollama discovery checks the configured `OLLAMA_URL` (default `http://localhost:11434`) and then the WSL VM's IP address on port 11434. You can select a different installed model with `OLLAMA_MODEL` and change the preferred server URL with `OLLAMA_URL`. If Ollama is bound only to WSL's loopback and Windows localhost forwarding is unavailable, configure Ollama to listen on the WSL network interface. Edge TTS with Christopher is the primary voice. Windows SAPI is the secondary voice; it selects an installed Christopher voice when available, otherwise it uses the Windows default voice. Audio playback tries pygame, playsound, Windows MCI, ffplay, then ffmpeg WAV conversion with winsound. The text assistant continues if speech or memory storage is unavailable.
+
+Type `exit`, `quit`, or `q` to close the assistant. Successful answers and failed attempts are recorded with timestamps, model, duration, and speech status.

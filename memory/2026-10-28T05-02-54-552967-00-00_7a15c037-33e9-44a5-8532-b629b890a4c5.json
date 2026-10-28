@@ -1,0 +1,16 @@
+{
+  "id": "7a15c037-33e9-44a5-8532-b629b890a4c5",
+  "asked_at": "2026-10-28T05:02:54.552967+00:00",
+  "saved_at": "2026-10-28T05:02:58.673730+00:00",
+  "question": "Hello",
+  "answer": null,
+  "provider": "ollama",
+  "model": "llama3.2",
+  "duration_seconds": 4.119,
+  "speech": {
+    "voice": "en-US-ChristopherNeural",
+    "status": "not attempted"
+  },
+  "status": "error",
+  "error": "Could not connect to Ollama at http://localhost:11434. Start Ollama and ensure the 'llama3.2' model is available. Details: [WinError 10061] No connection could be made because the target machine actively refused it"
+}

@@ -1,0 +1,16 @@
+{
+  "id": "19684880-2bc0-4d6f-9a47-c8259b4c17c1",
+  "asked_at": "2026-10-28T05:07:06.382632+00:00",
+  "saved_at": "2026-10-28T05:07:08.440896+00:00",
+  "question": "Hello",
+  "answer": null,
+  "provider": "ollama",
+  "model": "llama3.2",
+  "duration_seconds": 2.064,
+  "speech": {
+    "voice": "en-US-ChristopherNeural",
+    "status": "not attempted"
+  },
+  "status": "error",
+  "error": "Ollama returned HTTP 404: {\"error\":\"model 'llama3.2' not found\"}"
+}

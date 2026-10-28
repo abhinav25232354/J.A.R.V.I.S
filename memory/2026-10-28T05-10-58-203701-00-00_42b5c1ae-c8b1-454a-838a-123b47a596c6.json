@@ -1,0 +1,15 @@
+{
+  "id": "42b5c1ae-c8b1-454a-838a-123b47a596c6",
+  "asked_at": "2026-10-28T05:10:58.203701+00:00",
+  "saved_at": "2026-10-28T05:11:10.397137+00:00",
+  "question": "Hello",
+  "answer": "Hello. Is there something I can help you with or would you like to chat?",
+  "provider": "ollama",
+  "model": "llama3.2:1b",
+  "duration_seconds": 3.287,
+  "speech": {
+    "voice": "en-US-ChristopherNeural",
+    "status": "spoken with Windows SAPI fallback"
+  },
+  "status": "success"
+}

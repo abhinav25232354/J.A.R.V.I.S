@@ -1,0 +1,15 @@
+{
+  "id": "fccc0b1c-5b0d-4500-8f2d-e94615470906",
+  "asked_at": "2026-10-28T05:12:05.783047+00:00",
+  "saved_at": "2026-10-28T05:12:13.665579+00:00",
+  "question": "Hello",
+  "answer": "How can I assist you today?",
+  "provider": "ollama",
+  "model": "llama3.2:1b",
+  "duration_seconds": 2.455,
+  "speech": {
+    "voice": "en-US-ChristopherNeural",
+    "status": "spoken with Windows SAPI secondary voice"
+  },
+  "status": "success"
+}
