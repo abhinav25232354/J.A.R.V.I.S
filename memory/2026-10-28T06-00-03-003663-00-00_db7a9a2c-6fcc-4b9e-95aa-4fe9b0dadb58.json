@@ -1,0 +1,15 @@
+{
+  "id": "db7a9a2c-6fcc-4b9e-95aa-4fe9b0dadb58",
+  "asked_at": "2026-10-28T06:00:03.003663+00:00",
+  "saved_at": "2026-10-28T06:01:46.497860+00:00",
+  "question": "what is propositional logic in simple words. I am a MCA student.",
+  "answer": "As a MCA (Master of Computer Applications) student, you're likely familiar with mathematical and logical concepts. Propositional logic is a branch of mathematics that deals with statements that are either true or false.\n\nThink of it like a light switch - you can turn the switch ON (true) or OFF (false). In propositional logic, we use these simple true/false values to represent statements. For example:\n\n* \"It is raining outside\" can be represented as R (raining)\n* \"I am hungry\" can be represented as H (hungry)\n\nIn propositional logic, we use logical operators like:\n\n* AND (∧): \"If A and B are true, then C is also true\"\n* OR (+): \"If A or B is true, then C is also true\"\n* NOT (~): \"If A is false, then C is also false\"\n\nFor example:\n\n* (R ∧ H) means \"It is raining AND I am hungry\" is TRUE\n* (R ∨ H) means \"It is raining OR I am hungry\" is FALSE\n* (!R) means \"It is not raining\" is FALSE\n\nPropositional logic helps us solve problems and make decisions by using these logical operators to manipulate statements. It's a fundamental concept in computer science, as it enables the development of algorithms that can reason about complex information.\n\nIn your MCA studies, you've likely encountered propositional logic in computer programming courses, particularly when dealing with file systems, database queries, or user authentication.",
+  "provider": "ollama",
+  "model": "llama3.2:1b",
+  "duration_seconds": 103.494,
+  "speech": {
+    "voice": "en-US-EmmaMultilingualNeural",
+    "status": "spoken with en-US-EmmaMultilingualNeural via pygame"
+  },
+  "status": "success"
+}

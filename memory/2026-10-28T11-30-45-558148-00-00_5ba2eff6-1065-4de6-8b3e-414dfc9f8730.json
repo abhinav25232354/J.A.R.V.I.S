@@ -1,0 +1,15 @@
+{
+  "id": "5ba2eff6-1065-4de6-8b3e-414dfc9f8730",
+  "asked_at": "2026-10-28T11:30:45.558148+00:00",
+  "saved_at": "2026-10-28T11:32:23.835746+00:00",
+  "question": "what is propositional logic in brief?",
+  "answer": "Propositional logic is a branch of mathematical logic that deals with statements or propositions that are either true or false, but not both. It involves using logical operators such as AND, OR, and NOT to combine these propositions.\n\nIn propositional logic, a statement is typically represented by a proposition, which is one of the following:\n\n* Atomic proposition: A statement that can be either true (T) or false (F).\n* Compound proposition: A statement made up of two or more atomic propositions connected using logical operators.\n\nFor example:\n\n* P ∧ Q (P and Q are both true)\n* ¬P ∨ Q (P is not true, or Q is true)\n\nPropositional logic allows us to express complex ideas and relationships between statements using a simple, clear language. It has many applications in mathematics, computer science, philosophy, and other fields.\n\nSome key concepts in propositional logic include:\n\n* Tautology: A statement that is always true.\n* Contradiction: A statement that is always false.\n* Validity: A logical argument that holds true under all circumstances.\n* Soundness: A logical argument that is valid, even if it's not a tautology.",
+  "provider": "ollama",
+  "model": "llama3.2:1b",
+  "duration_seconds": 98.276,
+  "speech": {
+    "voice": "en-US-EmmaMultilingualNeural",
+    "status": "spoken with en-US-EmmaMultilingualNeural via pygame"
+  },
+  "status": "success"
+}
