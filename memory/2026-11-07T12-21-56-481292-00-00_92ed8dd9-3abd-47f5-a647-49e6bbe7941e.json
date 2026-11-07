@@ -1,0 +1,16 @@
+{
+  "id": "92ed8dd9-3abd-47f5-a647-49e6bbe7941e",
+  "asked_at": "2026-11-07T12:21:56.481292+00:00",
+  "saved_at": "2026-11-07T12:22:03.509341+00:00",
+  "question": "hello",
+  "answer": null,
+  "provider": "ollama",
+  "model": "llama3.2:1b",
+  "duration_seconds": 7.027,
+  "speech": {
+    "voice": "en-US-ChristopherNeural",
+    "status": "not attempted"
+  },
+  "status": "error",
+  "error": "RuntimeError"
+}

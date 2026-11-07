@@ -1,0 +1,15 @@
+{
+  "id": "b4978382-edf2-46a4-b35a-2f920e751d5d",
+  "asked_at": "2026-10-28T05:58:23.184966+00:00",
+  "saved_at": "2026-10-28T05:58:32.155222+00:00",
+  "question": "hello",
+  "answer": "Hello. Is there something I can help you with or would you like to chat?",
+  "provider": "ollama",
+  "model": "llama3.2:1b",
+  "duration_seconds": 8.968,
+  "speech": {
+    "voice": "en-US-ChristopherNeural",
+    "status": "spoken with en-US-ChristopherNeural via pygame"
+  },
+  "status": "success"
+}

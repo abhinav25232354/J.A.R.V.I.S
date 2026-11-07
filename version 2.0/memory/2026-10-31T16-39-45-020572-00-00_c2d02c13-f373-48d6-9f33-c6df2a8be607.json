@@ -1,0 +1,16 @@
+{
+  "id": "c2d02c13-f373-48d6-9f33-c6df2a8be607",
+  "asked_at": "2026-10-31T16:39:45.020572+00:00",
+  "saved_at": "2026-10-31T16:40:03.505740+00:00",
+  "question": "(Set-ExecutionPolicy -Scope Process -ExecutionPolicy RemoteSigned) ; (& \"c:\\Users\\Abhin\\Workspace\\Jarvis 2.0 - (28-10-2026)\\J.A.R.V.I.S\\.venv\\Scripts\\Activate.ps1\")",
+  "answer": null,
+  "provider": "ollama",
+  "model": "llama3.2:1b",
+  "duration_seconds": 18.484,
+  "speech": {
+    "voice": "JBFqnCBsd6RMkjVDRZzb",
+    "status": "not attempted"
+  },
+  "status": "error",
+  "error": "RemoteDisconnected"
+}

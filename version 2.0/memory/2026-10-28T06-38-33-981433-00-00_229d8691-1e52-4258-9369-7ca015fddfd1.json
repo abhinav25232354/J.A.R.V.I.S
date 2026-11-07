@@ -1,0 +1,15 @@
+{
+  "id": "229d8691-1e52-4258-9369-7ca015fddfd1",
+  "asked_at": "2026-10-28T06:38:33.981433+00:00",
+  "saved_at": "2026-10-28T06:39:01.346886+00:00",
+  "question": "what is semeotics in 2 lines",
+  "answer": "Semeiotics is the study of the relationships between signs, symbols, and their meanings within language and other forms of communication. It examines how meaning is generated through the interplay between signifiers (symbols) and significators (objects or contexts).",
+  "provider": "ollama",
+  "model": "llama3.2:1b",
+  "duration_seconds": 27.363,
+  "speech": {
+    "voice": "en-US-EmmaMultilingualNeural",
+    "status": "spoken with en-US-EmmaMultilingualNeural via pygame"
+  },
+  "status": "success"
+}

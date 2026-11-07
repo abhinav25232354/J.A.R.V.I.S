@@ -1,0 +1,16 @@
+{
+  "id": "916a3b56-9ef5-4416-af97-095d45fc8cfa",
+  "asked_at": "2026-10-31T16:50:24.730967+00:00",
+  "saved_at": "2026-10-31T16:50:28.795481+00:00",
+  "question": "Hello",
+  "answer": null,
+  "provider": "ollama",
+  "model": "llama3.2:1b",
+  "duration_seconds": 4.064,
+  "speech": {
+    "voice": "JBFqnCBsd6RMkjVDRZzb",
+    "status": "not attempted"
+  },
+  "status": "error",
+  "error": "RuntimeError"
+}

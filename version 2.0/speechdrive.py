@@ -1,0 +1,363 @@
+"""Fault-tolerant speech output with five audio playback backends."""
+
+import asyncio
+import importlib.util
+import os
+import queue
+import shutil
+import subprocess
+import tempfile
+from threading import Thread
+import time
+import uuid
+from pathlib import Path
+from user_settings import get_settings
+
+_ELEVENLABS_AVAILABLE: bool | None = None
+_ELEVENLABS_CHECKED_AT = 0.0
+_ELEVENLABS_RECHECK_SECONDS = 300
+
+
+def speech_capabilities() -> dict:
+    """Report installed speech and playback options without importing pygame."""
+    modules = {
+        name: importlib.util.find_spec(name) is not None
+        for name in ("elevenlabs", "pygame", "playsound", "pyttsx3")
+    }
+    commands = {name: shutil.which(name) is not None for name in ("ffplay", "ffmpeg")}
+    return {"modules": modules, "commands": commands}
+
+
+async def _generate_elevenlabs_audio(text: str, path: str) -> None:
+    from dotenv import load_dotenv
+    from elevenlabs.client import ElevenLabs
+
+    load_dotenv(Path(__file__).resolve().parent / ".env")
+    api_key = os.getenv("ELEVENLABS_API_KEY")
+    if not api_key:
+        raise RuntimeError("ELEVENLABS_API_KEY is not set; add it to .env or the environment")
+    settings = get_settings()
+    client = ElevenLabs(api_key=api_key, timeout=60.0)
+    last_error = None
+    for attempt in range(2):
+        try:
+            audio = client.text_to_speech.convert(
+                text=text,
+                voice_id=settings["voice"],
+                model_id=os.getenv("ELEVENLABS_MODEL_ID", "eleven_multilingual_v2"),
+                output_format="mp3_44100_128",
+                voice_settings={"speed": settings["speech_speed"]},
+            )
+            with open(path, "wb") as output:
+                for chunk in audio:
+                    if chunk:
+                        output.write(chunk)
+            if not Path(path).is_file() or Path(path).stat().st_size < 128:
+                raise RuntimeError("ElevenLabs returned an empty or invalid audio file")
+            return
+        except Exception as exc:
+            last_error = exc
+            if attempt == 0:
+                await asyncio.sleep(0.4)
+    raise RuntimeError(f"ElevenLabs synthesis failed: {last_error}") from last_error
+
+
+def check_elevenlabs_voice(timeout: float = 10.0) -> dict:
+    """Verify ElevenLabs credentials and voice by synthesizing a short sample."""
+    global _ELEVENLABS_AVAILABLE, _ELEVENLABS_CHECKED_AT
+    if not importlib.util.find_spec("elevenlabs"):
+        _ELEVENLABS_AVAILABLE = False
+        _ELEVENLABS_CHECKED_AT = time.monotonic()
+        return {"available": False, "detail": "elevenlabs package is not installed"}
+    audio_path = None
+    try:
+        with tempfile.NamedTemporaryFile(suffix=".mp3", delete=False) as audio_file:
+            audio_path = audio_file.name
+        asyncio.run(asyncio.wait_for(
+            _generate_elevenlabs_audio("Jarvis voice check.", audio_path), timeout=timeout
+        ))
+        _ELEVENLABS_AVAILABLE = True
+        _ELEVENLABS_CHECKED_AT = time.monotonic()
+        return {"available": True, "voice": get_settings()["voice"]}
+    except Exception as exc:
+        _ELEVENLABS_AVAILABLE = False
+        _ELEVENLABS_CHECKED_AT = time.monotonic()
+        return {"available": False, "detail": f"{type(exc).__name__}: {exc}"}
+    finally:
+        if audio_path:
+            try:
+                os.remove(audio_path)
+            except OSError:
+                pass
+
+
+def _play_pygame(path: str) -> None:
+    os.environ["PYGAME_HIDE_SUPPORT_PROMPT"] = "1"
+    import pygame
+
+    pygame.mixer.init()
+    try:
+        pygame.mixer.music.load(path)
+        pygame.mixer.music.play()
+        while pygame.mixer.music.get_busy():
+            time.sleep(0.1)
+        pygame.mixer.music.unload()
+    finally:
+        pygame.mixer.quit()
+
+
+def _play_playsound(path: str) -> None:
+    from playsound import playsound
+
+    try:
+        playsound(path, block=True)
+    except TypeError:
+        playsound(path)
+
+
+def _play_mci(path: str) -> None:
+    """Play MP3 through Windows Media Control Interface."""
+    if os.name != "nt":
+        raise OSError("Windows MCI is unavailable")
+    import ctypes
+
+    alias = f"jarvis_{uuid.uuid4().hex}"
+    escaped = os.path.abspath(path).replace('"', '""')
+    command = ctypes.windll.winmm.mciSendStringW
+    buffer = ctypes.create_unicode_buffer(512)
+    open_result = command(f'open "{escaped}" type mpegvideo alias {alias}', buffer, 512, None)
+    if open_result:
+        raise OSError(f"MCI open failed ({open_result})")
+    try:
+        result = command(f"play {alias} wait", buffer, 512, None)
+        if result:
+            raise OSError(f"MCI playback failed ({result})")
+    finally:
+        command(f"close {alias}", buffer, 512, None)
+
+
+def _play_ffplay(path: str) -> None:
+    executable = shutil.which("ffplay")
+    if not executable:
+        raise FileNotFoundError("ffplay not installed")
+    subprocess.run(
+        [executable, "-nodisp", "-autoexit", "-loglevel", "quiet", path],
+        check=True,
+        stdout=subprocess.DEVNULL,
+        stderr=subprocess.DEVNULL,
+        timeout=300,
+        creationflags=getattr(subprocess, "CREATE_NO_WINDOW", 0),
+    )
+
+
+def _play_wav(path: str) -> None:
+    """Last playback option: convert to WAV with ffmpeg and use Windows winsound."""
+    if os.name != "nt":
+        raise OSError("winsound playback is available only on Windows")
+    executable = shutil.which("ffmpeg")
+    if not executable:
+        raise FileNotFoundError("ffmpeg not installed for WAV conversion")
+    import winsound
+
+    wav_path = f"{path}.wav"
+    subprocess.run(
+        [executable, "-y", "-loglevel", "quiet", "-i", path, "-ac", "1", "-ar", "22050", wav_path],
+        check=True,
+        stdout=subprocess.DEVNULL,
+        stderr=subprocess.DEVNULL,
+        timeout=120,
+        creationflags=getattr(subprocess, "CREATE_NO_WINDOW", 0),
+    )
+    winsound.PlaySound(wav_path, winsound.SND_FILENAME)
+
+
+def _play_with_fallbacks(path: str) -> str | None:
+    """Try five independent playback methods; return the successful method."""
+    backends = (
+        ("pygame", _play_pygame),
+        ("playsound", _play_playsound),
+        ("Windows MCI", _play_mci),
+        ("ffplay", _play_ffplay),
+        ("WAV/winsound", _play_wav),
+    )
+    for name, playback in backends:
+        try:
+            # Do not redirect sys.stdout/stderr here: they are process-wide, so a
+            # playback thread would swallow the independent Ollama text stream.
+            playback(path)
+            return name
+        except Exception:
+            continue
+    return None
+
+
+def _speak_local_windows(text: str) -> bool:
+    """Last resort speech synthesis via built-in Windows SAPI."""
+    if os.name != "nt":
+        return False
+    try:
+        import base64
+
+        encoded = base64.b64encode(text.encode("utf-16le")).decode("ascii")
+        script = (
+            "$text=[Text.Encoding]::Unicode.GetString([Convert]::FromBase64String('"
+            + encoded
+            + "')); Add-Type -AssemblyName System.Speech; "
+            "$s=New-Object System.Speech.Synthesis.SpeechSynthesizer; "
+            "$s.Speak($text)"
+        )
+        subprocess.run(
+            ["powershell.exe", "-NoProfile", "-NonInteractive", "-Command", script],
+            check=True,
+            stdout=subprocess.DEVNULL,
+            stderr=subprocess.DEVNULL,
+            timeout=300,
+            creationflags=getattr(subprocess, "CREATE_NO_WINDOW", 0),
+        )
+        return True
+    except Exception:
+        return False
+
+
+def speak(text: str) -> str:
+    """Speak with the configured ElevenLabs voice, never raising to the caller."""
+    global _ELEVENLABS_AVAILABLE, _ELEVENLABS_CHECKED_AT
+    if not isinstance(text, str) or not text.strip():
+        return "skipped"
+    audio_path = None
+    should_try_elevenlabs = (
+        _ELEVENLABS_AVAILABLE is not False
+        or time.monotonic() - _ELEVENLABS_CHECKED_AT >= _ELEVENLABS_RECHECK_SECONDS
+    )
+    if should_try_elevenlabs:
+        try:
+            with tempfile.NamedTemporaryFile(suffix=".mp3", delete=False) as audio_file:
+                audio_path = audio_file.name
+            asyncio.run(_generate_elevenlabs_audio(text, audio_path))
+            _ELEVENLABS_AVAILABLE = True
+            _ELEVENLABS_CHECKED_AT = time.monotonic()
+            backend = _play_with_fallbacks(audio_path)
+            if backend:
+                return f"spoken with ElevenLabs voice {get_settings()['voice']} via {backend}"
+        except Exception:
+            _ELEVENLABS_AVAILABLE = False
+            _ELEVENLABS_CHECKED_AT = time.monotonic()
+        finally:
+            if audio_path:
+                try:
+                    os.remove(audio_path)
+                except OSError:
+                    pass
+                try:
+                    os.remove(f"{audio_path}.wav")
+                except OSError:
+                    pass
+
+    if _speak_local_windows(text):
+        return "spoken with Windows SAPI secondary voice"
+    return "unavailable; text answer retained"
+
+
+class SpeechStreamer:
+    """Synthesize upcoming phrases while a playback worker speaks earlier ones."""
+
+    def __init__(self) -> None:
+        self._text_queue: queue.Queue = queue.Queue()
+        self._audio_queue: queue.Queue = queue.Queue()
+        self._statuses: list[str] = []
+        self._synthesizer = None
+        self._player = None
+        self._closed = False
+
+    def _start(self) -> None:
+        if self._synthesizer is not None:
+            return
+        self._synthesizer = Thread(target=self._synthesize, daemon=True)
+        self._player = Thread(target=self._play, daemon=True)
+        self._synthesizer.start()
+        self._player.start()
+
+    def submit(self, text: str) -> None:
+        if text and text.strip() and not self._closed:
+            self._start()
+            self._text_queue.put(text.strip())
+
+    def _synthesize(self) -> None:
+        global _ELEVENLABS_AVAILABLE, _ELEVENLABS_CHECKED_AT
+        while True:
+            text = self._text_queue.get()
+            try:
+                if text is None:
+                    break
+                path = None
+                try:
+                    should_try_elevenlabs = (
+                        _ELEVENLABS_AVAILABLE is not False
+                        or time.monotonic() - _ELEVENLABS_CHECKED_AT >= _ELEVENLABS_RECHECK_SECONDS
+                    )
+                    if not should_try_elevenlabs:
+                        self._audio_queue.put((None, text, False))
+                        continue
+                    with tempfile.NamedTemporaryFile(suffix=".mp3", delete=False) as audio_file:
+                        path = audio_file.name
+                    asyncio.run(_generate_elevenlabs_audio(text, path))
+                    _ELEVENLABS_AVAILABLE = True
+                    _ELEVENLABS_CHECKED_AT = time.monotonic()
+                    self._audio_queue.put((path, text, True))
+                    path = None
+                except Exception:
+                    _ELEVENLABS_AVAILABLE = False
+                    _ELEVENLABS_CHECKED_AT = time.monotonic()
+                    self._audio_queue.put((None, text, False))
+                finally:
+                    if path:
+                        try:
+                            os.remove(path)
+                        except OSError:
+                            pass
+            finally:
+                self._text_queue.task_done()
+        self._audio_queue.put(None)
+
+    def _play(self) -> None:
+        while True:
+            item = self._audio_queue.get()
+            try:
+                if item is None:
+                    return
+                path, text, synthesized = item
+                try:
+                    if synthesized and path:
+                        backend = _play_with_fallbacks(path)
+                        if backend:
+                            self._statuses.append(f"spoken with ElevenLabs voice {get_settings()['voice']} via {backend}")
+                        elif _speak_local_windows(text):
+                            self._statuses.append("spoken with Windows SAPI secondary voice")
+                        else:
+                            self._statuses.append("unavailable; text answer retained")
+                    elif _speak_local_windows(text):
+                        self._statuses.append("spoken with Windows SAPI secondary voice")
+                    else:
+                        self._statuses.append("unavailable; text answer retained")
+                finally:
+                    if path:
+                        for target in (path, f"{path}.wav"):
+                            try:
+                                os.remove(target)
+                            except OSError:
+                                pass
+            finally:
+                self._audio_queue.task_done()
+
+    def close(self) -> str:
+        if self._closed:
+            return "; ".join(dict.fromkeys(self._statuses)) or "skipped"
+        self._closed = True
+        if self._synthesizer is None:
+            return "skipped"
+        self._text_queue.put(None)
+        self._text_queue.join()
+        self._synthesizer.join()
+        self._audio_queue.join()
+        self._player.join()
+        return "; ".join(dict.fromkeys(self._statuses)) or "unavailable; text answer retained"

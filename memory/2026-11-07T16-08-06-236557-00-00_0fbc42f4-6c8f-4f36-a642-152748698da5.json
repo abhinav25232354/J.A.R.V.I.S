@@ -1,0 +1,16 @@
+{
+  "id": "0fbc42f4-6c8f-4f36-a642-152748698da5",
+  "asked_at": "2026-11-07T16:08:06.236557+00:00",
+  "saved_at": "2026-11-07T16:08:10.987615+00:00",
+  "question": "hello",
+  "answer": null,
+  "provider": "ollama",
+  "model": "llama3.2:1b",
+  "duration_seconds": 4.75,
+  "speech": {
+    "voice": "en-US-ChristopherNeural",
+    "status": "not attempted"
+  },
+  "status": "error",
+  "error": "RemoteDisconnected"
+}
