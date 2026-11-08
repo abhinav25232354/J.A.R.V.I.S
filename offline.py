@@ -1,7 +1,9 @@
 """Discover and query an Ollama server on Windows or inside WSL."""
 
 import json
+import getpass
 import os
+import platform
 from pathlib import Path
 import shutil
 import subprocess
@@ -14,6 +16,47 @@ OLLAMA_URL = os.getenv("OLLAMA_URL", "http://localhost:11434")
 _active_url: str | None = None
 _active_model: str | None = None
 _ollama_process = None
+
+
+def locate_ollama_models_folder() -> str | None:
+    """Locate Ollama's model store on Windows, WSL, or a custom install path."""
+    candidates: list[Path] = []
+    configured = os.getenv("OLLAMA_MODELS")
+    if configured:
+        candidates.append(Path(os.path.expandvars(configured)).expanduser())
+
+    if platform.system() == "Windows":
+        profiles = [os.getenv("USERPROFILE"), str(Path.home())]
+        candidates.extend(Path(profile) / ".ollama" / "models" for profile in dict.fromkeys(p for p in profiles if p))
+    else:
+        candidates.append(Path.home() / ".ollama" / "models")
+        # WSL can share the Windows Ollama model store. Check likely usernames
+        # first, then mounted user profiles so a different Linux username works.
+        if "microsoft" in platform.release().lower() or os.getenv("WSL_DISTRO_NAME"):
+            users_root = Path("/mnt/c/Users")
+            usernames = [os.getenv("LOGNAME"), getpass.getuser()]
+            for username in dict.fromkeys(name for name in usernames if name):
+                candidates.append(users_root / username / ".ollama" / "models")
+            try:
+                candidates.extend(path / ".ollama" / "models" for path in users_root.iterdir() if path.is_dir())
+            except OSError:
+                pass
+
+    checked: set[str] = set()
+    existing: list[Path] = []
+    for candidate in candidates:
+        key = str(candidate).casefold()
+        if key in checked:
+            continue
+        checked.add(key)
+        try:
+            if candidate.is_dir():
+                existing.append(candidate)
+                if any(candidate.iterdir()):
+                    return str(candidate)
+        except OSError:
+            continue
+    return str(existing[0]) if existing else None
 
 
 def _ollama_executable() -> str | None:
@@ -188,6 +231,7 @@ def configured_model() -> str:
 def check_ollama() -> dict:
     """Find a reachable Ollama server, preferring Windows before WSL."""
     global _active_url, _active_model
+    models_dir = locate_ollama_models_folder()
     candidates = [OLLAMA_URL]
     candidates.extend(url for url in _wsl_urls() if url.rstrip("/") != OLLAMA_URL.rstrip("/"))
     tried: list[str] = []
@@ -208,6 +252,7 @@ def check_ollama() -> dict:
             "model_available": available,
             "models": sorted(names),
             "location": "WSL" if url not in (OLLAMA_URL, "http://localhost:11434") else "Windows/local endpoint",
+            "models_dir": models_dir,
         }
     if OLLAMA_URL.rstrip("/") == "http://localhost:11434":
         _start_ollama()
@@ -217,7 +262,7 @@ def check_ollama() -> dict:
             if names:
                 model = _resolve_discovered_model(names)
                 _active_url, _active_model = OLLAMA_URL, model
-                return {"available": True, "url": OLLAMA_URL, "model_available": any(name == model or name.split(":", 1)[0] == model for name in names), "models": sorted(names), "location": "Windows/local endpoint"}
+                return {"available": True, "url": OLLAMA_URL, "model_available": any(name == model or name.split(":", 1)[0] == model for name in names), "models": sorted(names), "location": "Windows/local endpoint", "models_dir": models_dir}
         except (HTTPError, URLError, TimeoutError, OSError, ValueError):
             pass
     # Windows may have Ollama installed but stopped inside a WSL distro. Start
@@ -241,6 +286,7 @@ def check_ollama() -> dict:
             "model_available": any(name == model or name.split(":", 1)[0] == model for name in names),
             "models": sorted(names),
             "location": "WSL",
+            "models_dir": models_dir,
         }
     _active_url = None
     _active_model = None
@@ -250,6 +296,7 @@ def check_ollama() -> dict:
         "model_available": False,
         "models": [],
         "tried": tried,
+        "models_dir": models_dir,
     }
 
 

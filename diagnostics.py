@@ -101,9 +101,13 @@ def run_startup_checks() -> dict:
         ollama = {"available": False, "detail": str(exc), "models": []}
     if not ollama["available"]:
         print("  Ollama: not found on Windows or WSL; questions will fail until it is available.")
+        if ollama.get("models_dir"):
+            print(f"  Ollama model files: found at {ollama['models_dir']} (server is not reachable)")
     else:
         location = ollama["location"]
         print(f"  Ollama: found in {location} at {ollama['url']}")
+        if ollama.get("models_dir"):
+            print(f"  Ollama model files: {ollama['models_dir']}")
         if ollama["model_available"]:
             print(f"  Model: {configured_model()} is available")
         else:
