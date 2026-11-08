@@ -4,15 +4,21 @@ This root project asks a locally running [Ollama](https://ollama.com/) model for
 
 ## Setup
 
-1. Install Ollama in Windows or WSL and download a model, for example `ollama pull llama3.2`.
-2. Install the terminal command:
+1. Install the terminal command:
    - Windows PowerShell: `powershell -ExecutionPolicy Bypass -File .\install-windows.ps1`, then open a new terminal.
    - WSL: `bash install-wsl.sh`, then open a new shell (or run `source ~/.profile`).
 
 The Windows installer registers a PowerShell `jarvis` function and a Command Prompt
-launcher. The WSL installer adds `~/.local/bin` to login and interactive shell paths.
-The installers use Python 3.10 or newer, install Python if it is missing, create a
-private environment for Jarvis, and install its libraries quietly. The command runs
+launcher and updates it when Jarvis is already installed. The WSL installer adds
+`~/.local/bin` to login and interactive shell paths and refreshes its launcher on
+reinstall. On Windows, setup asks whether to install Ollama or use an existing
+installation, then checks the selected Windows or WSL location. The WSL installer
+installs Ollama when it is missing. Both installers prepare
+Python 3.10 or newer and platform packages, upgrade every library in
+`requirements.txt`, and check package compatibility. Short progress updates are
+shown during setup. If setup stops, it explains the next step and saves technical
+details to a log file. After setup, download a model with `ollama pull llama3.2`.
+The command runs
 inside the terminal where you type `jarvis`. Jarvis asks for your name once and
 keeps it in `memory/profile.json`. Type `/settings` to change the Ollama model, voice,
 or speech speed. The uninstall menu removes the command, private environment, and

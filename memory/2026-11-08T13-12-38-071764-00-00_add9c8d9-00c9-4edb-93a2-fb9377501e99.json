@@ -1,0 +1,15 @@
+{
+  "id": "add9c8d9-00c9-4edb-93a2-fb9377501e99",
+  "asked_at": "2026-11-08T13:12:38.071764+00:00",
+  "saved_at": "2026-11-08T13:13:54.649451+00:00",
+  "question": "who was macbeth in william shakespear novel, explain in short.",
+  "answer": "In William Shakespeare's play Macbeth, Macbeth is the main character, a Scottish nobleman and general in King Duncan's army. He is a complex and ambitious individual who, driven by his wife's prophecies and a desire for power and revenge, murders the king and seizes the throne.\n\nInitially, Macbeth is a confident and courageous man, but as the play progresses, he becomes increasingly consumed by guilt, paranoia, and madness. He commits atrocities, including the slaughter of innocent men and the slaughter of his own family members, leading to his downfall.\n\nThroughout the play, Macbeth grapples with the moral implications of his actions, and his fate serves as a cautionary tale about the dangers of ambition, pride, and the corrupting influence of power.",
+  "provider": "ollama",
+  "model": "llama3.2:1b",
+  "duration_seconds": 76.575,
+  "speech": {
+    "voice": "en-US-ChristopherNeural",
+    "status": "spoken with en-US-ChristopherNeural via pygame"
+  },
+  "status": "success"
+}
