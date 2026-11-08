@@ -1,0 +1,15 @@
+{
+  "id": "9dec411f-c09c-451c-9258-a26f9cf3d561",
+  "asked_at": "2026-11-08T05:40:56.266422+00:00",
+  "saved_at": "2026-11-08T05:41:39.727140+00:00",
+  "question": "what is the full form of OCR and why it is used, explain in 3 lines.",
+  "answer": "The full form of OCR is Optical Character Recognition. It is used to convert printed or scanned documents into editable digital text, allowing users to read and use the content. OCR technology enables the extraction of text from various sources, such as images, documents, and videos, making it a crucial tool in various industries.",
+  "provider": "ollama",
+  "model": "llama3.2:1b",
+  "duration_seconds": 43.457,
+  "speech": {
+    "voice": "en-US-EmmaMultilingualNeural",
+    "status": "spoken with en-US-EmmaMultilingualNeural via pygame"
+  },
+  "status": "success"
+}

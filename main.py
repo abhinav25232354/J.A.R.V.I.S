@@ -78,7 +78,10 @@ def main() -> None:
             print(chunk, end="", flush=True)
             spoken_buffer += chunk
             words = spoken_buffer.split()
-            minimum_words, maximum_words = (7, 20) if first_segment else (12, 20)
+            # Queue a complete short sentence promptly. Speech synthesis and
+            # playback run on worker threads, so terminal streaming continues
+            # without waiting for audio.
+            minimum_words, maximum_words = (4, 18) if first_segment else (8, 20)
             # Keep whole sentences when possible; split long sentences into full phrases.
             boundary = max(spoken_buffer.rfind(mark) for mark in (". ", "! ", "? ", ", "))
             boundary_ready = boundary >= 0 and len(spoken_buffer[:boundary + 1].split()) >= minimum_words
@@ -114,7 +117,7 @@ def main() -> None:
         except Exception as exc:
             speech.close()
             elapsed = round(perf_counter() - started, 3)
-            print("Jarvis: I can't answer that right now. Please try again.")
+            print(f"Jarvis: The Ollama request failed ({type(exc).__name__}): {exc}")
             _save_safely(
                 question=question,
                 answer=None,
@@ -123,7 +126,7 @@ def main() -> None:
                 duration_seconds=elapsed,
                 speech_status="not attempted",
                 status="error",
-                error=type(exc).__name__,
+                error=f"{type(exc).__name__}: {exc}",
             )
 
 

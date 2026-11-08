@@ -9,6 +9,7 @@ PROFILE_PATH = MEMORY_DIR / "profile.json"
 SETTINGS_PATH = MEMORY_DIR / "settings.json"
 DEFAULT_SETTINGS = {
     "model": "llama3.2:1b",
+    "model_selection": "auto",
     "voice": "en-US-ChristopherNeural",
     "speech_speed": 1.0,
 }
@@ -47,6 +48,8 @@ def get_settings() -> dict:
     for key in ("model", "voice"):
         if not isinstance(settings.get(key), str) or not settings[key].strip():
             settings[key] = DEFAULT_SETTINGS[key]
+    if settings.get("model_selection") not in ("auto", "manual"):
+        settings["model_selection"] = "auto"
     return settings
 
 

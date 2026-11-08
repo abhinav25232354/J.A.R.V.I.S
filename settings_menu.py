@@ -133,7 +133,8 @@ def settings_menu() -> bool:
     while True:
         settings = get_settings()
         print("\nJarvis settings")
-        print(f"  1. Ollama model   {settings['model']}")
+        mode = "manual" if settings["model_selection"] == "manual" else "automatic"
+        print(f"  1. Ollama model   {settings['model']} ({mode})")
         print(f"  2. Speech speed   {settings['speech_speed']:.1f}x")
         current_voice = next((label for label, value in VOICES if value == settings['voice']), settings['voice'])
         print(f"  3. Voice          {current_voice}")
@@ -143,10 +144,37 @@ def settings_menu() -> bool:
         if choice == "0":
             return False
         if choice == "1":
-            value = input("Ollama model name: ").strip()
-            if value:
-                save_settings({"model": value})
-                print(f"Model set to {value}.")
+            print("  1. Automatic model selection")
+            print("  2. Choose manually from installed models")
+            selection = input("Select a model mode: ").strip()
+            if selection == "1":
+                save_settings({"model_selection": "auto"})
+                print("Automatic model selection enabled.")
+            elif selection == "2":
+                from offline import list_ollama_models
+
+                print("Looking for Ollama models on Windows and WSL...")
+                result = list_ollama_models()
+                models = result.get("models", [])
+                if not result.get("available") or not models:
+                    print("No installed Ollama models were found. Start Ollama and install a model, then try again.")
+                    continue
+                print(f"Models found via {result.get('location', 'Ollama')}:")
+                for index, model in enumerate(models, start=1):
+                    print(f"  {index}. {model}")
+                selected = input("Model number (or Enter to cancel): ").strip()
+                if not selected:
+                    print("Model selection cancelled.")
+                    continue
+                try:
+                    model = models[int(selected) - 1]
+                except (ValueError, IndexError):
+                    print("Choose one of the listed numbers.")
+                else:
+                    save_settings({"model": model, "model_selection": "manual"})
+                    print(f"Manual model set to {model}.")
+            else:
+                print("Choose 1 or 2.")
         elif choice == "2":
             value = input("Speech speed (0.5 to 2.0, where 1.0 is normal): ").strip()
             try:

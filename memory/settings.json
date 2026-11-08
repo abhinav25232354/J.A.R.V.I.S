@@ -1,5 +1,6 @@
 {
   "model": "llama3.2:1b",
+  "model_selection": "manual",
   "voice": "en-US-EmmaMultilingualNeural",
   "speech_speed": 1.0
 }

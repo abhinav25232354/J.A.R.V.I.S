@@ -1,0 +1,16 @@
+{
+  "id": "f9f33ea0-8b4e-4474-b20a-91e25caa2599",
+  "asked_at": "2026-11-08T05:35:19.469139+00:00",
+  "saved_at": "2026-11-08T05:35:23.570901+00:00",
+  "question": "hello",
+  "answer": null,
+  "provider": "ollama",
+  "model": "llama3.2:1b",
+  "duration_seconds": 4.101,
+  "speech": {
+    "voice": "en-US-ChristopherNeural",
+    "status": "not attempted"
+  },
+  "status": "error",
+  "error": "RuntimeError: Could not reach Ollama at http://localhost:11434: <urlopen error [WinError 10061] No connection could be made because the target machine actively refused it>"
+}
