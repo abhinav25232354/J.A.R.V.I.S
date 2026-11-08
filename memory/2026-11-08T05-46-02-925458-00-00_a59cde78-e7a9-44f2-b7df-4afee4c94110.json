@@ -1,0 +1,16 @@
+{
+  "id": "a59cde78-e7a9-44f2-b7df-4afee4c94110",
+  "asked_at": "2026-11-08T05:46:02.925458+00:00",
+  "saved_at": "2026-11-08T05:46:28.431460+00:00",
+  "question": "what is wikipedia",
+  "answer": null,
+  "provider": "ollama",
+  "model": "llama3.2:1b",
+  "duration_seconds": 25.504,
+  "speech": {
+    "voice": "en-US-ChristopherNeural",
+    "status": "not attempted"
+  },
+  "status": "error",
+  "error": "RuntimeError: Ollama was not found on Windows or WSL. Start Ollama and expose its service on port 11434 (WSL localhost forwarding or WSL networking)."
+}

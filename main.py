@@ -45,7 +45,10 @@ def main() -> None:
     while True:
         try:
             question = input("You: ").strip()
-        except (EOFError, KeyboardInterrupt):
+        except KeyboardInterrupt:
+            print("\nReady for your next question.")
+            continue
+        except EOFError:
             print("\nGoodbye.")
             break
         except Exception:
@@ -114,6 +117,10 @@ def main() -> None:
                 speech_status=speech_status,
                 status="success",
             )
+        except KeyboardInterrupt:
+            speech.stop()
+            print("\nInterrupted. Ready for your next question.")
+            continue
         except Exception as exc:
             speech.close()
             elapsed = round(perf_counter() - started, 3)

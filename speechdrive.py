@@ -7,7 +7,7 @@ import queue
 import shutil
 import subprocess
 import tempfile
-from threading import Thread
+from threading import Event, Lock, Thread
 import time
 import uuid
 from pathlib import Path
@@ -17,6 +17,42 @@ VOICE = "en-US-ChristopherNeural"
 _EDGE_AVAILABLE: bool | None = None
 _EDGE_CHECKED_AT = 0.0
 _EDGE_RECHECK_SECONDS = 300
+_PLAYBACK_LOCK = Lock()
+_ACTIVE_MCI_ALIAS: str | None = None
+_ACTIVE_PROCESS: subprocess.Popen | None = None
+
+
+def _stop_current_audio() -> None:
+    """Best-effort stop for whichever playback backend is currently active."""
+    global _ACTIVE_MCI_ALIAS, _ACTIVE_PROCESS
+    try:
+        import pygame
+
+        if pygame.mixer.get_init():
+            pygame.mixer.music.stop()
+    except Exception:
+        pass
+    try:
+        import winsound
+
+        winsound.PlaySound(None, winsound.SND_PURGE)
+    except Exception:
+        pass
+    with _PLAYBACK_LOCK:
+        alias = _ACTIVE_MCI_ALIAS
+        process = _ACTIVE_PROCESS
+    if alias and os.name == "nt":
+        try:
+            import ctypes
+
+            ctypes.windll.winmm.mciSendStringW(f"stop {alias}", None, 0, None)
+        except Exception:
+            pass
+    if process and process.poll() is None:
+        try:
+            process.terminate()
+        except OSError:
+            pass
 
 
 def speech_capabilities() -> dict:
@@ -125,26 +161,40 @@ def _play_mci(path: str) -> None:
     open_result = command(f'open "{escaped}" type mpegvideo alias {alias}', buffer, 512, None)
     if open_result:
         raise OSError(f"MCI open failed ({open_result})")
+    global _ACTIVE_MCI_ALIAS
     try:
+        with _PLAYBACK_LOCK:
+            _ACTIVE_MCI_ALIAS = alias
         result = command(f"play {alias} wait", buffer, 512, None)
         if result:
             raise OSError(f"MCI playback failed ({result})")
     finally:
         command(f"close {alias}", buffer, 512, None)
+        with _PLAYBACK_LOCK:
+            if _ACTIVE_MCI_ALIAS == alias:
+                _ACTIVE_MCI_ALIAS = None
 
 
 def _play_ffplay(path: str) -> None:
+    global _ACTIVE_PROCESS
     executable = shutil.which("ffplay")
     if not executable:
         raise FileNotFoundError("ffplay not installed")
-    subprocess.run(
+    process = subprocess.Popen(
         [executable, "-nodisp", "-autoexit", "-loglevel", "quiet", path],
-        check=True,
         stdout=subprocess.DEVNULL,
         stderr=subprocess.DEVNULL,
-        timeout=300,
         creationflags=getattr(subprocess, "CREATE_NO_WINDOW", 0),
     )
+    with _PLAYBACK_LOCK:
+        _ACTIVE_PROCESS = process
+    try:
+        if process.wait(timeout=300) != 0:
+            raise subprocess.CalledProcessError(process.returncode, process.args)
+    finally:
+        with _PLAYBACK_LOCK:
+            if _ACTIVE_PROCESS is process:
+                _ACTIVE_PROCESS = None
 
 
 def _play_wav(path: str) -> None:
@@ -168,7 +218,7 @@ def _play_wav(path: str) -> None:
     winsound.PlaySound(wav_path, winsound.SND_FILENAME)
 
 
-def _play_with_fallbacks(path: str) -> str | None:
+def _play_with_fallbacks(path: str, stop_event: Event | None = None) -> str | None:
     """Try five independent playback methods; return the successful method."""
     backends = (
         ("pygame", _play_pygame),
@@ -178,12 +228,16 @@ def _play_with_fallbacks(path: str) -> str | None:
         ("WAV/winsound", _play_wav),
     )
     for name, playback in backends:
+        if stop_event and stop_event.is_set():
+            return None
         try:
             # Do not redirect sys.stdout/stderr here: they are process-wide, so a
             # playback thread would swallow the independent Ollama text stream.
             playback(path)
             return name
         except Exception:
+            if stop_event and stop_event.is_set():
+                return None
             continue
     return None
 
@@ -209,15 +263,21 @@ def _speak_local_windows(text: str) -> bool:
             "$v=$s.GetInstalledVoices() | Where-Object { $_.VoiceInfo.Name -match [regex]::Escape($voiceName) } | Select-Object -First 1; "
             "if ($v) { $s.SelectVoice($v.VoiceInfo.Name) }; $s.Speak($text)"
         )
-        subprocess.run(
+        process = subprocess.Popen(
             ["powershell.exe", "-NoProfile", "-NonInteractive", "-Command", script],
-            check=True,
             stdout=subprocess.DEVNULL,
             stderr=subprocess.DEVNULL,
-            timeout=300,
             creationflags=getattr(subprocess, "CREATE_NO_WINDOW", 0),
         )
-        return True
+        global _ACTIVE_PROCESS
+        with _PLAYBACK_LOCK:
+            _ACTIVE_PROCESS = process
+        try:
+            return process.wait(timeout=300) == 0
+        finally:
+            with _PLAYBACK_LOCK:
+                if _ACTIVE_PROCESS is process:
+                    _ACTIVE_PROCESS = None
     except Exception:
         return False
 
@@ -271,6 +331,7 @@ class SpeechStreamer:
         self._synthesizer = None
         self._player = None
         self._closed = False
+        self._stop_event = Event()
 
     def _start(self) -> None:
         if self._synthesizer is not None:
@@ -292,6 +353,8 @@ class SpeechStreamer:
             try:
                 if text is None:
                     break
+                if self._stop_event.is_set():
+                    continue
                 path = None
                 try:
                     should_try_edge = (
@@ -306,6 +369,8 @@ class SpeechStreamer:
                     asyncio.run(_generate_edge_audio(text, path))
                     _EDGE_AVAILABLE = True
                     _EDGE_CHECKED_AT = time.monotonic()
+                    if self._stop_event.is_set():
+                        continue
                     self._audio_queue.put((path, text, True))
                     path = None
                 except Exception:
@@ -330,11 +395,13 @@ class SpeechStreamer:
                     return
                 path, text, synthesized = item
                 try:
+                    if self._stop_event.is_set():
+                        continue
                     if synthesized and path:
-                        backend = _play_with_fallbacks(path)
+                        backend = _play_with_fallbacks(path, self._stop_event)
                         if backend:
                             self._statuses.append(f"spoken with {get_settings()['voice']} via {backend}")
-                        elif _speak_local_windows(text):
+                        elif not self._stop_event.is_set() and _speak_local_windows(text):
                             self._statuses.append("spoken with Windows SAPI secondary voice")
                         else:
                             self._statuses.append("unavailable; text answer retained")
@@ -364,3 +431,29 @@ class SpeechStreamer:
         self._audio_queue.join()
         self._player.join()
         return "; ".join(dict.fromkeys(self._statuses)) or "unavailable; text answer retained"
+
+    def stop(self) -> None:
+        """Cancel queued speech and stop active playback without waiting for synthesis."""
+        if self._closed:
+            return
+        self._closed = True
+        self._stop_event.set()
+        _stop_current_audio()
+        for pending_queue in (self._text_queue, self._audio_queue):
+            while True:
+                try:
+                    item = pending_queue.get_nowait()
+                except queue.Empty:
+                    break
+                else:
+                    if pending_queue is self._audio_queue and item and item[0]:
+                        for target in (item[0], f"{item[0]}.wav"):
+                            try:
+                                os.remove(target)
+                            except OSError:
+                                pass
+                    pending_queue.task_done()
+        if self._synthesizer is not None:
+            self._text_queue.put(None)
+        if self._player is not None:
+            self._audio_queue.put(None)
